@@ -1,0 +1,26 @@
+import pandas as pd
+
+def get_type_count(dataframe):
+    # Adding a new categorical column 'car_type' based on values of the 'car' column
+    conditions = [
+        (dataframe['car'] <= 15),
+        (dataframe['car'] > 15) & (dataframe['car'] <= 25),
+        (dataframe['car'] > 25)
+    ]
+    choices = ['low', 'medium', 'high']
+    dataframe['car_type'] = pd.Series(pd.cut(dataframe['car'], bins=[-float('inf'), 15, 25, float('inf')], labels=choices))
+
+    # Calculate count of occurrences for each 'car_type' category
+    type_count = dataframe['car_type'].value_counts().to_dict()
+
+    # Sort the dictionary alphabetically based on keys
+    type_count = dict(sorted(type_count.items()))
+
+    return type_count
+
+# Load the dataset into a DataFrame
+dataset = pd.read_csv('dataset-1.csv')
+
+# Call the function with the dataset
+result = get_type_count(dataset)
+print(result)
