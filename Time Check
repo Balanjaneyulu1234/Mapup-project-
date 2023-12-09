@@ -1,0 +1,21 @@
+import pandas as pd
+
+def verify_time_completeness(dataframe):
+    # Convert 'timestamp' columns to datetime format
+    dataframe['start_timestamp'] = pd.to_datetime(dataframe['startDay'] + ' ' + dataframe['startTime'])
+    dataframe['end_timestamp'] = pd.to_datetime(dataframe['endDay'] + ' ' + dataframe['endTime'])
+
+    # Calculate the time differences in hours between start and end timestamps
+    dataframe['time_diff'] = (dataframe['end_timestamp'] - dataframe['start_timestamp']).dt.total_seconds() / 3600
+
+    # Group by 'id' and 'id_2' and check for incorrect timestamps
+    grouped = dataframe.groupby(['id', 'id_2']).apply(lambda x: (x['time_diff'].sum() < 168) or (len(x) < 7 * 24))
+
+    return grouped
+
+# Load the dataset into a DataFrame
+dataset = pd.read_csv('dataset-2.csv')
+
+# Call the function with the dataset
+result = verify_time_completeness(dataset)
+print(result)
