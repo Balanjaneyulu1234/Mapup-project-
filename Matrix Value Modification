@@ -1,0 +1,19 @@
+import pandas as pd
+
+def multiply_matrix(input_matrix):
+    # Iterate through the DataFrame and apply the multiplication logic
+    modified_matrix = input_matrix.copy()  # Create a copy to avoid modifying the original DataFrame
+    for index, row in modified_matrix.iterrows():
+        for column in modified_matrix.columns:
+            value = modified_matrix.loc[index, column]
+            if value > 20:
+                modified_matrix.loc[index, column] = round(value * 0.75, 1)
+            else:
+                modified_matrix.loc[index, column] = round(value * 1.25, 1)
+
+    return modified_matrix
+
+# Assuming 'result_matrix' is the resulting DataFrame from Question 1
+# Call the function with the resulting DataFrame
+resulting_matrix = multiply_matrix(result_matrix)
+print(resulting_matrix)
